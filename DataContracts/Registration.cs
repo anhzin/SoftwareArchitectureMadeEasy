@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -9,14 +11,21 @@ using Common;
 namespace DataContracts
 {
     [DataContract]
-    public class Registration
+    public class Registration :BaseTable
     {
         [DataMember]
-        public RegistrationType RegistrationType { get; set; }
+        [Key]
+        public int Id { get; set; }
 
+        [DataMember]
+        public RegistrationType RegistrationType { get; set; }
         
        [DataMember]
-       public virtual ICollection<Attendee> Attendees { get; set;}
+       public int? AttendeeId { get; set; }
+        
+        [DataMember]
+        [ForeignKey("AttendeeId")]
+        public virtual Attendee Attendee { get; set; }
         
     }
 }

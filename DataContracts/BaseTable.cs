@@ -42,6 +42,21 @@ namespace DataContracts
                 _status = value;
             }
         }
+        public void UpdateAuditFieldValues(UserContext userContext, bool updateCreation)
+        {
+            DateTime dt = DateTime.Now;
+
+            // Update modified audit fields
+            this.ModifiedBy = userContext.AuditUserName;
+            this.ModifiedDate = dt;
+
+            if (updateCreation == true)
+            {
+                // Update creation audit fields
+                this.CreatedBy = userContext.AuditUserName;
+                this.CreateDate = dt;
+            }
+        }
 
     }
 }

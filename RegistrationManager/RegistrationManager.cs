@@ -11,15 +11,16 @@ namespace RegistrationManager
 {
     public class RegistrationManager : IRegistrationManager
     {
-        public Registration ProcessRegistration(UserContext userContext, ICollection<Attendee> attendees)
+        public Registration ProcessRegistration(UserContext userContext, Attendee attendee)
         {
           
             Registration returnRegistration = new Registration();
-            List<Attendee> registrationAttendees = new List<Attendee>(UnityCache.ResolveDefault<IRegistrationEngine>().ProcessAttendees(userContext, attendees));
+            //List<Attendee> registrationAttendees = new List<Attendee>(UnityCache.ResolveDefault<IRegistrationEngine>().ProcessAttendees(userContext, attendees));
 
            
             Registration newReg = new Registration();
-            newReg.Attendees = registrationAttendees;
+            newReg.Attendee = attendee;
+            //newReg.Attendee = registrationAttendees;
 
            returnRegistration= UnityCache.ResolveDefault<IRegistrationAccessor>().AddRegistration(userContext, newReg);
 

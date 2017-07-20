@@ -27,12 +27,22 @@ namespace Website.Controllers
         [HttpPost]
         public ActionResult Create(Attendee attendee)
         {
-            List<Attendee> attendees = new List<Attendee>();
-            attendees.Add(attendee);
+            //List<Attendee> attendees = new List<Attendee>();
+            //attendees.Add(attendee);
+            //IRegistrationManager regManager = UnityCache.ResolveDefault<IRegistrationManager>();
+            //UserContext uc = new UserContext();
+            //uc.AuditUserName = "KEN";
+
+            //uc.ConnectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            //Registration reg = regManager.ProcessRegistration(uc, attendees);
+            //return View();       
+        
             IRegistrationManager regManager = UnityCache.ResolveDefault<IRegistrationManager>();
             UserContext uc = new UserContext();
+            uc.AuditUserName = "KEN";
+
             uc.ConnectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            Registration reg = regManager.ProcessRegistration(uc, attendees);
+            Registration reg = regManager.ProcessRegistration(uc, attendee);
             return View();
         }
     }

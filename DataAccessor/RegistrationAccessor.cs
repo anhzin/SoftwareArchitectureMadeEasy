@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using Contracts;
 using DataContracts;
+using Common;
 
 namespace DataAccessor
 {
@@ -11,7 +13,20 @@ namespace DataAccessor
             Registration newRegistration = new Registration();
             using (GPDb db = new GPDb(userContext))
             {
-                newRegistration = db.Registrations.Add(registration);
+                Attendee newAttendee = new Attendee();
+                newAttendee.CopyValuesFrom(registration.Attendee, false);
+
+                newAttendee.UpdateAuditFieldValues(userContext, true);
+
+                db.Attendees.Add(newAttendee);
+
+               
+                newRegistration.CopyValuesFrom(registration,false);
+                newRegistration.UpdateAuditFieldValues(userContext, true);
+                newRegistration.Attendee = newAttendee;
+
+                db.Registrations.Add(newRegistration);
+
                 db.SaveChanges();
             }
 
