@@ -65,4 +65,7 @@
     <Build Include="dbo\Tables\Event.sql" />
     <Build Include="dbo\Tables\Attendee.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="GPDb.local.publish.xml" />
+  </ItemGroup>
 </Project>
