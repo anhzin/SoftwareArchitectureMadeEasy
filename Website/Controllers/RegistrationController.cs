@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Configuration;
 using DataContracts;
 using Contracts;
+using Website.ViewModels;
 using UnityResolver;
 
 namespace Website.Controllers
@@ -20,12 +21,13 @@ namespace Website.Controllers
 
         public ActionResult Create()
         {
+      
             return View();
 
         }
 
         [HttpPost]
-        public ActionResult Create(Attendee attendee)
+        public ActionResult Create(List<Attendee> Attendees)
         {
             //List<Attendee> attendees = new List<Attendee>();
             //attendees.Add(attendee);
@@ -42,7 +44,7 @@ namespace Website.Controllers
             uc.AuditUserName = "KEN";
 
             uc.ConnectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            Registration reg = regManager.ProcessRegistration(uc, attendee);
+            //Registration reg = regManager.ProcessRegistration(uc, attendee);
             return View();
         }
     }

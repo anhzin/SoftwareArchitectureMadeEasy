@@ -1,35 +1,113 @@
-﻿@model DataContracts.Attendee
+﻿@model Website.ViewModels.CreateRegistrationViewModel
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Great Plains Game Festival Registration";
 }
 
-<h2>Create</h2>
 
-@using (Html.BeginForm()) 
-{
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>Registration</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+@Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <div id="registration">
+        <h1>Great Plains Game Festival Registration</h1>
+        <header>
+            <input id="new-attendee" type="text" placeholder="First Name" data-bind="value:inputFirstName" />
+            <input id="new-attendee" type="text" placeholder="Last Name" data-bind="value:inputLastName" />
+            <input id="new-attendee" type="text" placeholder="Email" data-bind="value:inputEmail" />
+            <button data-bind="click: addOne">Add Attendee</button>         
+        </header>
+
+        <section id="main" style="display: block;">
+            <div data-bind="visible:Attendees().length>0">
+     
             </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-             
-                <input type="submit" value="Create" class="btn btn-default" />
+            <ul id="attendee-list" data-bind="template:{ name:'item-template',foreach: Attendees}"></ul>
+            <button data-bind="click: postRegistration">Register</button>
+        </section>
+
+        <footer style="display: block;">
+            <div data-bind="visible:Attendees().length>0">
+                <div class="attendee-count"><b data-bind="text:Attendees().length"></b> attendees</div>
+
             </div>
-        </div>
+        </footer>
     </div>
-}
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
+    <script type="text/template" id="item-template">
+        <li data-bind="event:{ dblclick :$root.toggleEditMode}">
+            <div class="view">
+                <label data-bind="text:FirstName"></label>
+                <label data-bind="text:LastName"></label>
+                <label data-bind="text:Email"></label>
+            </div>
+        </li>
+    </script>
+
 </div>
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/knockout")
+
+
+<script>
+
+    $(function () {
+        var attendee = function (firstName, lastName, email) {
+            var self = this;
+            self.FirstName = ko.observable(firstName);
+            self.LastName = ko.observable(lastName);
+            self.Email = ko.observable(email);       
+        }
+
+        var viewModel = function () {
+            var self = this;
+            self.Attendees = ko.observableArray([]);
+            self.inputFirstName = ko.observable("");
+            self.inputLastName = ko.observable("");
+            self.inputEmail = ko.observable(""); 
+            self.postRegistration = function () {
+                $.ajax({
+                    url: '/Registration/Create',
+                    type: 'POST',
+                    contentType: 'application/json; charset=utf-8',
+                    data: ko.toJSON(self.Attendees),
+                    success: function (status) {
+                        alert(status);
+                    }
+                });     
+            };
+
+            self.addOne = function () {
+                var order = self.Attendees().length;
+                var t = new attendee(self.inputFirstName(), self.inputLastName(),self.inputEmail());
+                self.Attendees.push(t);
+            };
+
+            self.createOnEnter = function (item, event) {
+                if (event.keyCode == 13 && self.inputFirstName()) {
+                    self.addOne();
+                    self.inputFirstName("");
+                    self.inputLastName("");
+                    self.inputEmail("");
+                } else {
+                    return true;
+                };
+            }
+
+            self.toggleEditMode = function (item, event) {
+                $(event.target).closest('li').toggleClass('editing');
+            }
+
+            self.editOnEnter = function (item, event) {
+                if (event.keyCode == 13 && item.FirstName) {
+                    self.toggleEditMode(item, event);
+                } else {
+                    return true;
+                };
+            }          
+        };
+
+        ko.applyBindings(new viewModel());
+
+    })
+</script>
