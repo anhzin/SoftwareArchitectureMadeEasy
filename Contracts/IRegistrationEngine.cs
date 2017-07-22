@@ -11,5 +11,6 @@ namespace Contracts
     public interface IRegistrationEngine
     {
         ICollection<Attendee> ProcessAttendees(UserContext userContext, ICollection<Attendee> attendees);
+       
     }
 }

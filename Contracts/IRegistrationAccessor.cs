@@ -9,6 +9,7 @@ namespace Contracts
 {
     public interface IRegistrationAccessor
     {
-        Registration AddRegistration(UserContext userContext, Registration registration);
+        ICollection<Registration> AddRegistration(UserContext userContext, ICollection<Attendee> attendees);
+        Attendee FindAttendee(UserContext userContext, Attendee attendee);
     }
 }

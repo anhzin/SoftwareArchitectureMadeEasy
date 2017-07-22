@@ -20,21 +20,20 @@ namespace Website.Controllers
 
         public ActionResult Create()
         {
-      
+
             return View();
 
         }
 
         [HttpPost]
-        public ActionResult Create(List<Attendee> Attendees)
-        {            
-        
+        public ActionResult Create(List<Attendee> attendees)
+        {
             IRegistrationManager regManager = UnityCache.ResolveDefault<IRegistrationManager>();
             UserContext uc = new UserContext();
             uc.AuditUserName = "KEN";
 
             uc.ConnectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-          //  Registration reg = regManager.ProcessRegistration(uc, attendee);
+            var reg = regManager.ProcessRegistration(uc, attendees);
             return View();
         }
     }

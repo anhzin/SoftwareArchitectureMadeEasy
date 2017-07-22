@@ -13,23 +13,20 @@ namespace RegistrationEngine
     public class RegistrationEngine : IRegistrationEngine       
     {
         public ICollection<Attendee> ProcessAttendees(UserContext userContext, ICollection<Attendee> attendees)
-        {
+        {           
             List<Attendee> registrationAttendees = new List<Attendee>();
 
-            foreach (Attendee a in attendees)
+            foreach (Attendee attendee in attendees)
             {
-                if (a.Id == null)
-                {
-                    registrationAttendees.Add(UnityCache.ResolveDefault<IAttendeeAccessor>().AddAttendee(userContext, a));
-                }
-                else
-                {
-                    registrationAttendees.Add(a);
-                }
+                Attendee CheckedAttendee = new Attendee();
+                CheckedAttendee =  UnityCache.ResolveDefault<IRegistrationAccessor>().FindAttendee(userContext, attendee);
+
+                registrationAttendees.Add(CheckedAttendee);
             }
 
             return registrationAttendees;
 
         }
+      
     }
 }
